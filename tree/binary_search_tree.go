@@ -1,5 +1,11 @@
 package tree
 
+import (
+	"fmt"
+
+	"github.com/algo/queue"
+)
+
 type TreeNode struct {
 	left  *TreeNode
 	Data  int
@@ -16,6 +22,8 @@ func NewBinarySearchTree(rootData int) *BinarySearchTree {
 }
 
 func (this *BinarySearchTree) add(elem int) error {
+	fmt.Printf("Adding %v to queue\n", elem)
+
 	newNode := TreeNode{Data: elem}
 	curr := this.Root
 
@@ -47,5 +55,34 @@ func (this *BinarySearchTree) size() int {
 }
 
 func (this *BinarySearchTree) inOrder() []int {
-	return []int{}
+	inOrderSlice := make([]int, 0, 10000)
+
+	fmt.Printf("Root: %+v\n", this.Root)
+	q := queue.NewQueue(100)
+	q.Add(*this.Root)
+
+	for {
+		elem, err := q.Remove()
+		if err != nil {
+			break
+		}
+
+		node, ok := elem.(TreeNode)
+		if ok {
+			fmt.Printf("Dequeued %+v\n", node.Data)
+			inOrderSlice = append(inOrderSlice, node.Data)
+
+			if node.left != nil {
+				q.Add(*node.left)
+			}
+			if node.right != nil {
+				q.Add(*node.right)
+			}
+		} else {
+			fmt.Println("Error in typecasting elem to TreeNode type")
+			break
+		}
+
+	}
+	return inOrderSlice
 }

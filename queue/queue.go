@@ -6,19 +6,19 @@ import (
 )
 
 type Queue struct {
-	Size  int
-	arr   []int
-	front int
-	rear  int
+	MaxSize int
+	arr     []interface{}
+	front   int
+	rear    int
 }
 
 func NewQueue(size int) *Queue {
-	q := Queue{Size: size, front: -1, rear: -1}
-	q.arr = make([]int, size)
+	q := Queue{MaxSize: size, front: -1, rear: -1}
+	q.arr = make([]interface{}, size)
 	return &q
 }
 
-func (this *Queue) add(item int) error {
+func (this *Queue) Add(item interface{}) error {
 	if this.isFull() {
 		return errors.New("Queue is full")
 	}
@@ -27,7 +27,7 @@ func (this *Queue) add(item int) error {
 	return nil
 }
 
-func (this *Queue) remove() (int, error) {
+func (this *Queue) Remove() (interface{}, error) {
 	if this.isEmpty() {
 		return -1, errors.New("Queue is empty")
 	}
@@ -44,11 +44,11 @@ func (this *Queue) isEmpty() bool {
 	return this.front == this.rear
 }
 
-func (this *Queue) size() int {
+func (this *Queue) Size() int {
 	return this.rear - this.front
 }
 
-func (this *Queue) display() {
+func (this *Queue) Display() {
 	front := this.front
 	rear := this.rear
 	if front == -1 {
