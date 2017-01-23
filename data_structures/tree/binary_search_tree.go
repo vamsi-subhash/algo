@@ -3,7 +3,7 @@ package tree
 import (
 	"fmt"
 
-	"github.com/algo/queue"
+	"github.com/vamsi-subhash/algo/queue"
 )
 
 type TreeNode struct {
