@@ -6,11 +6,13 @@ import (
 )
 
 func TestBinarySearchTree_InsertAndInorderTraversal(t *testing.T) {
-	bstree := NewBinarySearchTree(4)
+	rootNode := IntTreeNode{data: 4}
+	bstree := NewBinarySearchTree(&rootNode)
 
 	elements := []int{4, 2, 6, 1, 3, 5, 7}
 	for _, elem := range elements[1:] {
-		err := bstree.add(elem)
+		node := &IntTreeNode{data: elem}
+		err := bstree.add(node)
 		if err != nil {
 			t.Fatal(err)
 		}

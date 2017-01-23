@@ -3,43 +3,69 @@ package tree
 import (
 	"fmt"
 
-	"github.com/vamsi-subhash/algo/queue"
+	"github.com/vamsi-subhash/algo/data_structures/queue"
 )
 
-type TreeNode struct {
-	left  *TreeNode
-	Data  int
-	right *TreeNode
+// type TreeNode interface {
+// 	GetLeft() *TreeNode
+// 	GetRight() *TreeNode
+// 	SetLeft(child *TreeNode)
+// 	SetRight(child *TreeNode)
+// 	LessThan(other *TreeNode) bool
+// }
+
+type IntTreeNode struct {
+	left  *IntTreeNode
+	data  int
+	right *IntTreeNode
+}
+
+func (node *IntTreeNode) GetLeft() *IntTreeNode {
+	return node.left
+}
+
+func (node *IntTreeNode) GetRight() *IntTreeNode {
+	return node.right
+}
+
+func (node *IntTreeNode) SetLeft(child *IntTreeNode) {
+	node.left = child
+}
+
+func (node *IntTreeNode) SetRight(child *IntTreeNode) {
+	node.right = child
+}
+
+func (node *IntTreeNode) LessThan(other *IntTreeNode) bool {
+	// otherNode := other.(*IntTreeNode)
+	return node.data < other.data
 }
 
 type BinarySearchTree struct {
-	Root *TreeNode
+	Root *IntTreeNode
 }
 
-func NewBinarySearchTree(rootData int) *BinarySearchTree {
-	root := TreeNode{Data: rootData}
-	return &BinarySearchTree{Root: &root}
+func NewBinarySearchTree(root *IntTreeNode) *BinarySearchTree {
+	return &BinarySearchTree{Root: root}
 }
 
-func (this *BinarySearchTree) add(elem int) error {
-	fmt.Printf("Adding %v to queue\n", elem)
+func (this *BinarySearchTree) add(newNode *IntTreeNode) error {
+	fmt.Printf("Adding %v to queue\n", newNode)
 
-	newNode := TreeNode{Data: elem}
 	curr := this.Root
-
 	for curr != nil {
-		if elem < curr.Data {
-			if curr.left == nil {
-				curr.left = &newNode
+		if newNode.LessThan(curr) {
+			if curr.GetLeft() == nil {
+				curr.SetLeft(newNode)
 				return nil
 			}
-			curr = curr.left
+			curr = curr.GetLeft()
 		} else {
 			if curr.right == nil {
-				curr.right = &newNode
+				curr.SetRight(newNode)
 				return nil
 			}
-			curr = curr.right
+			curr = curr.GetRight()
 		}
 	}
 
@@ -67,16 +93,16 @@ func (this *BinarySearchTree) inOrder() []int {
 			break
 		}
 
-		node, ok := elem.(TreeNode)
+		node, ok := elem.(IntTreeNode)
 		if ok {
-			fmt.Printf("Dequeued %+v\n", node.Data)
-			inOrderSlice = append(inOrderSlice, node.Data)
+			fmt.Printf("Dequeued %+v\n", node)
+			inOrderSlice = append(inOrderSlice, node.data)
 
 			if node.left != nil {
-				q.Add(*node.left)
+				q.Add(*node.GetLeft())
 			}
 			if node.right != nil {
-				q.Add(*node.right)
+				q.Add(*node.GetRight())
 			}
 		} else {
 			fmt.Println("Error in typecasting elem to TreeNode type")
